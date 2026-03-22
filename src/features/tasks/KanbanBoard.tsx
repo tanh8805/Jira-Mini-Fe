@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 import TaskCard from "./TaskCard";
 import { type Task, type TaskStatus, updateTaskApi } from "./task.api";
@@ -28,6 +29,8 @@ function KanbanBoard({
   const [draggingTaskId, setDraggingTaskId] = useState<string | null>(null);
   const [dragOverStatus, setDragOverStatus] = useState<TaskStatus | null>(null);
   const [droppedTaskId, setDroppedTaskId] = useState<string | null>(null);
+  const [springBackTaskId, setSpringBackTaskId] = useState<string | null>(null);
+  const [hasDroppedInZone, setHasDroppedInZone] = useState<boolean>(false);
 
   const tasksByStatus = useMemo(() => {
     return {
@@ -41,6 +44,8 @@ function KanbanBoard({
     if (!draggingTaskId) {
       return;
     }
+
+    setHasDroppedInZone(true);
 
     const movingTask = tasks.find((task) => task.id === draggingTaskId);
 
@@ -84,13 +89,34 @@ function KanbanBoard({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+    <motion.div
+      layout
+      className="relative grid grid-cols-1 gap-4 lg:grid-cols-3"
+    >
+      {draggingTaskId ? (
+        <>
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/4 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-300/30 blur-3xl"
+            animate={{ opacity: [0.2, 0.45, 0.2], scale: [0.9, 1.15, 0.9] }}
+            transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-2/3 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-300/20 blur-3xl"
+            animate={{ opacity: [0.15, 0.35, 0.15], scale: [0.85, 1.05, 0.85] }}
+            transition={{ duration: 1.35, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </>
+      ) : null}
+
       {statusColumns.map((column) => {
         const columnTasks = tasksByStatus[column.status];
         const isActiveDropZone = dragOverStatus === column.status;
 
         return (
-          <section
+          <motion.section
+            layout
             key={column.status}
             onDragOver={(event) => {
               event.preventDefault();
@@ -105,11 +131,49 @@ function KanbanBoard({
                 current === column.status ? null : current,
               )
             }
-            className={`rounded-xl bg-gray-200/80 p-3 transition ${isActiveDropZone ? "ring-2 ring-blue-300" : ""}`}
+            className={`relative rounded-xl bg-gray-200/80 p-3 transition ${isActiveDropZone ? "ring-2 ring-blue-300" : ""}`}
           >
             <h2 className="mb-3 text-sm font-semibold tracking-wide text-gray-700">
-              {column.title} ({columnTasks.length})
+              {column.title} (
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={`${column.status}-${columnTasks.length}`}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.16, ease: "easeOut" }}
+                  className="inline-block"
+                >
+                  {columnTasks.length}
+                </motion.span>
+              </AnimatePresence>
+              )
             </h2>
+
+            <AnimatePresence>
+              {isActiveDropZone ? (
+                <motion.div
+                  key={`${column.status}-drop-zone`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="pointer-events-none absolute inset-3 rounded-lg border border-dashed border-blue-300 bg-blue-100/55"
+                >
+                  <motion.div
+                    className="absolute inset-0 rounded-lg"
+                    animate={{ opacity: [0.25, 0.6, 0.25] }}
+                    transition={{
+                      duration: 1.1,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    style={{
+                      boxShadow: "0 0 0 1px rgba(147, 197, 253, 0.7) inset",
+                    }}
+                  />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
 
             <div className="space-y-3">
               {columnTasks.length === 0 ? (
@@ -131,29 +195,46 @@ function KanbanBoard({
               ) : null}
 
               {columnTasks.map((task) => (
-                <div
+                <motion.div
+                  layout
                   key={task.id}
                   draggable
-                  onDragStart={() => setDraggingTaskId(task.id)}
+                  onDragStart={() => {
+                    setHasDroppedInZone(false);
+                    setDraggingTaskId(task.id);
+                  }}
                   onDragEnd={() => {
+                    if (!hasDroppedInZone) {
+                      setSpringBackTaskId(task.id);
+                      setTimeout(() => {
+                        setSpringBackTaskId((current) =>
+                          current === task.id ? null : current,
+                        );
+                      }, 280);
+                    }
+
+                    setHasDroppedInZone(false);
                     setDraggingTaskId(null);
                     setDragOverStatus(null);
                   }}
                   className="transition-all duration-200"
+                  transition={{ type: "spring", stiffness: 320, damping: 32 }}
                 >
                   <TaskCard
                     task={task}
                     onClick={onTaskClick}
                     isDragging={draggingTaskId === task.id}
-                    isDropPopped={droppedTaskId === task.id}
+                    isDropPopped={
+                      droppedTaskId === task.id || springBackTaskId === task.id
+                    }
                   />
-                </div>
+                </motion.div>
               ))}
             </div>
-          </section>
+          </motion.section>
         );
       })}
-    </div>
+    </motion.div>
   );
 }
 

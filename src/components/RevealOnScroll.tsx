@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 
 type RevealOnScrollProps = {
   children: ReactNode;
@@ -11,47 +12,20 @@ function RevealOnScroll({
   className,
   delayMs = 0,
 }: RevealOnScrollProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-
-  useEffect(() => {
-    const element = containerRef.current;
-    if (!element) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry?.isIntersecting) {
-          return;
-        }
-
-        setIsVisible(true);
-        observer.unobserve(entry.target);
-      },
-      {
-        threshold: 0.16,
-      },
-    );
-
-    observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
   return (
-    <div
-      ref={containerRef}
-      className={`reveal ${isVisible ? "reveal-visible" : ""} ${className ?? ""}`.trim()}
-      style={{
-        transitionDelay: `${delayMs}ms`,
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.16 }}
+      transition={{
+        duration: 0.28,
+        ease: "easeOut",
+        delay: delayMs / 1000,
       }}
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
 

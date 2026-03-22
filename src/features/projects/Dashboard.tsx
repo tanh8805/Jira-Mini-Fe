@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -63,6 +63,10 @@ function Dashboard() {
   const [openMenuProjectId, setOpenMenuProjectId] = useState<string | null>(
     null,
   );
+  const [modalOrigin, setModalOrigin] = useState<{ x: number; y: number }>({
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  });
 
   const {
     register,
@@ -154,7 +158,12 @@ function Dashboard() {
     void fetchProjects();
   }, []);
 
-  const onOpenCreate = () => {
+  const onOpenCreate = (event?: MouseEvent<HTMLButtonElement>) => {
+    if (event) {
+      const { clientX, clientY } = event;
+      setModalOrigin({ x: clientX, y: clientY });
+    }
+
     setCreateError("");
     setEditingProject(null);
     reset({ name: "", description: "" });
@@ -162,6 +171,7 @@ function Dashboard() {
   };
 
   const onOpenEdit = (project: Project) => {
+    setModalOrigin({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
     setCreateError("");
     setEditingProject(project);
     reset({
@@ -250,7 +260,7 @@ function Dashboard() {
         </h1>
         <button
           type="button"
-          onClick={onOpenCreate}
+          onClick={(event) => onOpenCreate(event)}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
         >
           + Tạo dự án mới
@@ -472,7 +482,12 @@ function Dashboard() {
 
       {isCreateOpen ? (
         <div className="modal-backdrop-enter fixed inset-0 z-50 flex items-center justify-center bg-black/35 p-4">
-          <div className="modal-surface-enter w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
+          <div
+            className="modal-surface-enter w-full max-w-lg rounded-xl bg-white p-6 shadow-xl"
+            style={{
+              transformOrigin: `${modalOrigin.x}px ${modalOrigin.y}px`,
+            }}
+          >
             <h2 className="mb-4 text-xl font-semibold text-gray-900">
               {editingProject ? "Chỉnh sửa dự án" : "Tạo dự án mới"}
             </h2>

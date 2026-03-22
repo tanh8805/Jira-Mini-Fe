@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -57,6 +58,10 @@ function ProjectMembers() {
   const [serverError, setServerError] = useState<string>("");
   const [deletingMemberId, setDeletingMemberId] = useState<string>("");
   const [isDeletingProject, setIsDeletingProject] = useState<boolean>(false);
+  const [modalOrigin, setModalOrigin] = useState<{ x: number; y: number }>({
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  });
 
   const {
     register,
@@ -108,7 +113,11 @@ function ProjectMembers() {
     void fetchMembers();
   }, [effectiveProjectId]);
 
-  const onOpenAdd = () => {
+  const onOpenAdd = (event?: MouseEvent<HTMLButtonElement>) => {
+    if (event) {
+      setModalOrigin({ x: event.clientX, y: event.clientY });
+    }
+
     setServerError("");
     reset({ email: "", role: "MEMBER" });
     setIsAddOpen(true);
@@ -200,8 +209,9 @@ function ProjectMembers() {
 
     try {
       await removeProjectMemberApi(effectiveProjectId, targetMember.id);
-
-      await fetchMembers();
+      setMembers((currentMembers) =>
+        currentMembers.filter((member) => member.id !== targetMember.id),
+      );
       toast.success(
         actionLabel === "rời project"
           ? "Bạn đã rời project"
@@ -328,7 +338,7 @@ function ProjectMembers() {
           {canAddMember ? (
             <button
               type="button"
-              onClick={onOpenAdd}
+              onClick={(event) => onOpenAdd(event)}
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
               + Thêm thành viên
@@ -396,61 +406,79 @@ function ProjectMembers() {
                 ))
               : null}
 
-            {!isLoading
-              ? members.map((member, index) => (
-                  <tr
-                    key={`${member.id}-${index}`}
-                    className="group transition hover:bg-gray-50"
-                  >
-                    <td className="px-4 py-3 text-sm text-gray-700">
-                      {index + 1}
-                    </td>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                      <div className="flex items-center gap-2">
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-700">
-                          {getInitials(member.fullName) || "?"}
-                        </span>
-                        <span>{member.fullName}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
-                      {member.email}
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-                      <span
-                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${memberRoleBadgeClassMap[member.role]}`}
-                      >
-                        {member.role}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-right text-sm">
-                      {canRemoveMember(member) ? (
-                        <button
-                          type="button"
-                          onClick={() => void onRemoveMember(member)}
-                          disabled={deletingMemberId === member.id}
-                          className="rounded-md bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 opacity-0 transition duration-150 group-hover:opacity-100 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+            <AnimatePresence initial={false}>
+              {!isLoading
+                ? members.map((member, index) => (
+                    <motion.tr
+                      layout
+                      key={member.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8, height: 0 }}
+                      transition={{
+                        layout: { type: "spring", stiffness: 320, damping: 30 },
+                        opacity: { duration: 0.2, ease: "easeOut" },
+                        y: { duration: 0.2, ease: "easeOut" },
+                      }}
+                      className="group transition hover:bg-gray-50"
+                    >
+                      <td className="px-4 py-3 text-sm text-gray-700">
+                        {index + 1}
+                      </td>
+                      <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                        <div className="flex items-center gap-2">
+                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-700">
+                            {getInitials(member.fullName) || "?"}
+                          </span>
+                          <span>{member.fullName}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-600">
+                        {member.email}
+                      </td>
+                      <td className="px-4 py-3 text-sm">
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${memberRoleBadgeClassMap[member.role]}`}
                         >
-                          {deletingMemberId === member.id
-                            ? "Đang xử lý..."
-                            : currentMember && currentMember.id === member.id
-                              ? "Rời project"
-                              : "Xóa"}
-                        </button>
-                      ) : (
-                        <span className="text-xs text-gray-400">-</span>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              : null}
+                          {member.role}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-right text-sm">
+                        {canRemoveMember(member) ? (
+                          <motion.button
+                            type="button"
+                            onClick={() => void onRemoveMember(member)}
+                            disabled={deletingMemberId === member.id}
+                            initial={{ opacity: 0 }}
+                            whileHover={{ opacity: 1 }}
+                            className="rounded-md bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {deletingMemberId === member.id
+                              ? "Đang xử lý..."
+                              : currentMember && currentMember.id === member.id
+                                ? "Rời project"
+                                : "Xóa"}
+                          </motion.button>
+                        ) : (
+                          <span className="text-xs text-gray-400">-</span>
+                        )}
+                      </td>
+                    </motion.tr>
+                  ))
+                : null}
+            </AnimatePresence>
           </tbody>
         </table>
       </div>
 
       {isAddOpen ? (
         <div className="modal-backdrop-enter fixed inset-0 z-50 flex items-center justify-center bg-black/35 p-4">
-          <div className="modal-surface-enter w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            className="modal-surface-enter w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+            style={{
+              transformOrigin: `${modalOrigin.x}px ${modalOrigin.y}px`,
+            }}
+          >
             <h2 className="mb-4 text-xl font-semibold text-gray-900">
               Thêm thành viên
             </h2>

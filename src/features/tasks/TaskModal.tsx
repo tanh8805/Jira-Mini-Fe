@@ -23,6 +23,7 @@ type TaskModalSubmitPayload = {
 type TaskModalProps = {
   isOpen: boolean;
   task?: Task | null;
+  modalOrigin?: { x: number; y: number };
   members: ProjectMember[];
   isSubmitting: boolean;
   errorMessage: string;
@@ -35,6 +36,7 @@ type TaskModalProps = {
 function TaskModal({
   isOpen,
   task,
+  modalOrigin,
   members,
   isSubmitting,
   errorMessage,
@@ -136,7 +138,14 @@ function TaskModal({
 
   return (
     <div className="modal-backdrop-enter fixed inset-0 z-50 flex items-center justify-center bg-black/35 p-4">
-      <div className="modal-surface-enter w-full max-w-5xl rounded-xl bg-white p-6 shadow-xl">
+      <div
+        className="modal-surface-enter w-full max-w-5xl rounded-xl bg-white p-6 shadow-xl"
+        style={{
+          transformOrigin: modalOrigin
+            ? `${modalOrigin.x}px ${modalOrigin.y}px`
+            : "50% 50%",
+        }}
+      >
         <h2 className="mb-4 text-xl font-semibold text-gray-900">
           {isEditMode ? "Chi tiết công việc" : "Tạo công việc"}
         </h2>

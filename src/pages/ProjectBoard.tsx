@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getUserDisplayLabel } from "../features/auth/auth.api";
@@ -48,6 +48,13 @@ function ProjectBoard() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [modalError, setModalError] = useState<string>("");
   const [isModalSubmitting, setIsModalSubmitting] = useState<boolean>(false);
+  const [taskModalOrigin, setTaskModalOrigin] = useState<{
+    x: number;
+    y: number;
+  }>({
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  });
 
   const effectiveProjectId = projectId ?? "";
   const currentUserLabel = useMemo(() => getUserDisplayLabel().trim(), []);
@@ -130,7 +137,11 @@ function ProjectBoard() {
     );
   }
 
-  const openCreateTaskModal = () => {
+  const openCreateTaskModal = (event?: MouseEvent<HTMLButtonElement>) => {
+    if (event) {
+      setTaskModalOrigin({ x: event.clientX, y: event.clientY });
+    }
+
     setModalError("");
     setSelectedTask(null);
     setIsTaskModalOpen(true);
@@ -267,7 +278,7 @@ function ProjectBoard() {
 
         <button
           type="button"
-          onClick={openCreateTaskModal}
+          onClick={(event) => openCreateTaskModal(event)}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
         >
           + Tạo công việc
@@ -378,6 +389,7 @@ function ProjectBoard() {
       <TaskModal
         isOpen={isTaskModalOpen}
         task={selectedTask}
+        modalOrigin={taskModalOrigin}
         members={members}
         isSubmitting={isModalSubmitting}
         errorMessage={modalError}
