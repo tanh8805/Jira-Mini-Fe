@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +16,31 @@ type RegisterFormValues = {
 type SubmitState = "idle" | "loading" | "success";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const registerFormVariants: Variants = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.055,
+      delayChildren: 0.04,
+    },
+  },
+};
+
+const registerFieldVariants: Variants = {
+  hidden: { opacity: 0, y: 12, scale: 0.985 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 240,
+      damping: 24,
+    },
+  },
+};
 
 function Register() {
   const navigate = useNavigate();
@@ -82,8 +108,16 @@ function Register() {
         Đăng ký nhanh để bắt đầu quản lý dự án chuyên nghiệp hơn.
       </p>
 
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div
+      <motion.form
+        className="space-y-4"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        variants={registerFormVariants}
+        initial="hidden"
+        animate="show"
+      >
+        <motion.div
+          variants={registerFieldVariants}
           className={`auth-field-wrap ${
             focusedField && focusedField !== "fullName" ? "auth-dimmed" : ""
           }`}
@@ -132,9 +166,10 @@ function Register() {
               </motion.p>
             ) : null}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
-        <div
+        <motion.div
+          variants={registerFieldVariants}
           className={`auth-field-wrap ${
             focusedField && focusedField !== "email" ? "auth-dimmed" : ""
           }`}
@@ -185,9 +220,10 @@ function Register() {
               </motion.p>
             ) : null}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
-        <div
+        <motion.div
+          variants={registerFieldVariants}
           className={`auth-field-wrap ${
             focusedField && focusedField !== "password" ? "auth-dimmed" : ""
           }`}
@@ -281,9 +317,10 @@ function Register() {
               </motion.p>
             ) : null}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
-        <div
+        <motion.div
+          variants={registerFieldVariants}
           className={`auth-field-wrap ${
             focusedField && focusedField !== "confirmPassword"
               ? "auth-dimmed"
@@ -374,65 +411,71 @@ function Register() {
               </motion.p>
             ) : null}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
-        <motion.button
-          type="submit"
-          disabled={isWorking || submitState === "success"}
-          animate={{
-            width: submitState === "idle" ? "100%" : 56,
-            borderRadius: submitState === "idle" ? 12 : 999,
-          }}
-          transition={{ duration: 0.28, ease: "easeInOut" }}
-          className="auth-liquid-button relative mx-auto flex h-12 w-full items-center justify-center bg-blue-600 px-4 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed"
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            {submitState === "idle" ? (
-              <motion.span
-                key="register-text"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                Đăng ký
-              </motion.span>
-            ) : null}
-
-            {submitState === "loading" ? (
-              <motion.span
-                key="register-loading"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, rotate: 360 }}
-                exit={{ opacity: 0 }}
-                transition={{ repeat: Infinity, duration: 0.9, ease: "linear" }}
-                className="inline-flex h-5 w-5 rounded-full border-2 border-white/40 border-t-white"
-              />
-            ) : null}
-
-            {submitState === "success" ? (
-              <motion.span
-                key="register-success"
-                initial={{ opacity: 0, scale: 0.7 }}
-                animate={{ opacity: 1, scale: [1, 1.18, 1] }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.32, ease: "easeOut" }}
-                className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500"
-              >
-                <svg
-                  viewBox="0 0 20 20"
-                  className="h-3.5 w-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  aria-hidden="true"
+        <motion.div variants={registerFieldVariants}>
+          <motion.button
+            type="submit"
+            disabled={isWorking || submitState === "success"}
+            animate={{
+              width: submitState === "idle" ? "100%" : 56,
+              borderRadius: submitState === "idle" ? 12 : 999,
+            }}
+            transition={{ duration: 0.28, ease: "easeInOut" }}
+            className="auth-liquid-button relative mx-auto flex h-12 w-full items-center justify-center bg-blue-600 px-4 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {submitState === "idle" ? (
+                <motion.span
+                  key="register-text"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
-                  <path d="M4 10.5l3.2 3.2L16 5.8" />
-                </svg>
-              </motion.span>
-            ) : null}
-          </AnimatePresence>
-        </motion.button>
+                  Đăng ký
+                </motion.span>
+              ) : null}
+
+              {submitState === "loading" ? (
+                <motion.span
+                  key="register-loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, rotate: 360 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 0.9,
+                    ease: "linear",
+                  }}
+                  className="inline-flex h-5 w-5 rounded-full border-2 border-white/40 border-t-white"
+                />
+              ) : null}
+
+              {submitState === "success" ? (
+                <motion.span
+                  key="register-success"
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: [1, 1.18, 1] }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.32, ease: "easeOut" }}
+                  className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    className="h-3.5 w-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 10.5l3.2 3.2L16 5.8" />
+                  </svg>
+                </motion.span>
+              ) : null}
+            </AnimatePresence>
+          </motion.button>
+        </motion.div>
 
         <AnimatePresence>
           {serverError ? (
@@ -447,7 +490,7 @@ function Register() {
             </motion.p>
           ) : null}
         </AnimatePresence>
-      </form>
+      </motion.form>
 
       <p className="mt-5 text-center text-sm text-gray-600">
         Đã có tài khoản?{" "}
