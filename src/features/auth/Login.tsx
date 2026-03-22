@@ -51,7 +51,7 @@ function Login() {
         window.setTimeout(resolve, 440);
       });
 
-      navigate("/projects", { replace: true });
+      navigate("/", { replace: true });
     } catch (error: unknown) {
       setSubmitState("idle");
 
