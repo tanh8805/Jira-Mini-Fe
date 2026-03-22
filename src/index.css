@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.workspace-page-enter {
+  animation: workspacePageEnter 180ms ease-out;
+}
+
+.modal-backdrop-enter {
+  animation: modalBackdropEnter 180ms ease-out;
+  backdrop-filter: blur(2px);
+}
+
+.modal-surface-enter {
+  animation: modalSurfaceEnter 180ms ease-out;
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(229, 231, 235, 0) 0%,
+    rgba(243, 244, 246, 0.95) 50%,
+    rgba(229, 231, 235, 0) 100%
+  );
+  animation: shimmerMove 1.2s infinite;
+}
+
+.task-dragging {
+  transform: rotate(2deg) scale(1.01);
+  box-shadow:
+    0 18px 36px rgba(15, 23, 42, 0.16),
+    0 6px 12px rgba(15, 23, 42, 0.12);
+}
+
+.task-drop-pop {
+  animation: taskDropPop 240ms ease-out;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 560ms ease,
+    transform 560ms ease;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-lift {
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 16px 30px rgba(15, 23, 42, 0.12),
+    0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.btn-gradient {
+  background-image: linear-gradient(120deg, #2563eb 0%, #1d4ed8 45%, #2563eb 100%);
+  background-size: 220% 100%;
+  transition:
+    background-position 260ms ease,
+    transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.btn-gradient:hover {
+  background-position: 100% 0;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.28);
+}
+
+.hero-orb {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  border-radius: 9999px;
+  filter: blur(52px);
+  pointer-events: none;
+  opacity: 0.28;
+  animation: floatOrb 9s ease-in-out infinite;
+}
+
+.hero-orb-left {
+  left: -110px;
+  top: 80px;
+  background: #60a5fa;
+}
+
+.hero-orb-right {
+  right: -110px;
+  top: 140px;
+  background: #a78bfa;
+  animation-delay: 1.2s;
+}
+
+.tech-marquee {
+  overflow: hidden;
+}
+
+.tech-track {
+  display: flex;
+  gap: 0.75rem;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+
+.tech-pill {
+  border: 1px solid #d1d5db;
+  border-radius: 9999px;
+  background: #f9fafb;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.animate-float-slow {
+  animation: floatOrb 6.5s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes floatOrb {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+
+@keyframes workspacePageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalBackdropEnter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSurfaceEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmerMove {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes taskDropPop {
+  0% {
+    transform: scale(0.96);
+  }
+  70% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
