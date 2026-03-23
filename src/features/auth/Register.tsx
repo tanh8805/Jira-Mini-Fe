@@ -90,22 +90,22 @@ function Register() {
       if (axios.isAxiosError(error) && error.response?.status === 409) {
         setError("email", {
           type: "server",
-          message: "Email đã tồn tại",
+          message: "Email already exists",
         });
         return;
       }
 
-      setServerError("Đăng ký thất bại. Vui lòng thử lại.");
+      setServerError("Registration failed. Please try again.");
     }
   };
 
   return (
     <div className="w-full rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-200 sm:p-8">
       <h1 className="mb-2 text-center text-xl font-semibold text-gray-900 sm:text-2xl">
-        Tạo tài khoản mới
+        Create a new account
       </h1>
       <p className="mb-6 text-center text-sm text-gray-500">
-        Đăng ký nhanh để bắt đầu quản lý dự án chuyên nghiệp hơn.
+        Register quickly to start managing projects more professionally.
       </p>
 
       <motion.form
@@ -131,13 +131,13 @@ function Register() {
               onFocus={() => setFocusedField("fullName")}
               className="w-full rounded-xl bg-transparent px-3 pt-5 pb-2.5 text-sm outline-none"
               {...register("fullName", {
-                required: "Họ và tên là bắt buộc",
+                required: "Full name is required",
                 maxLength: {
                   value: 100,
-                  message: "Họ và tên không được vượt quá 100 ký tự",
+                  message: "Full name must not exceed 100 characters",
                 },
                 validate: (value) =>
-                  value.trim().length > 0 || "Họ và tên không được để trống",
+                  value.trim().length > 0 || "Full name cannot be blank",
                 onBlur: () => setFocusedField(null),
               })}
             />
@@ -149,7 +149,7 @@ function Register() {
                   : ""
               }`}
             >
-              Họ và tên
+              Full name
             </label>
           </div>
 
@@ -183,14 +183,14 @@ function Register() {
               onFocus={() => setFocusedField("email")}
               className="w-full rounded-xl bg-transparent px-3 pt-5 pb-2.5 text-sm outline-none"
               {...register("email", {
-                required: "Email là bắt buộc",
+                required: "Email is required",
                 maxLength: {
                   value: 100,
-                  message: "Email không được vượt quá 100 ký tự",
+                  message: "Email must not exceed 100 characters",
                 },
                 pattern: {
                   value: emailPattern,
-                  message: "Email không đúng định dạng",
+                  message: "Invalid email format",
                 },
                 onBlur: () => setFocusedField(null),
               })}
@@ -237,14 +237,14 @@ function Register() {
               onFocus={() => setFocusedField("password")}
               className="w-full rounded-xl bg-transparent px-3 pt-5 pb-2.5 pr-11 text-sm outline-none"
               {...register("password", {
-                required: "Mật khẩu là bắt buộc",
+                required: "Password is required",
                 minLength: {
                   value: 6,
-                  message: "Mật khẩu phải có ít nhất 6 ký tự",
+                  message: "Password must be at least 6 characters",
                 },
                 maxLength: {
                   value: 100,
-                  message: "Mật khẩu không được vượt quá 100 ký tự",
+                  message: "Password must not exceed 100 characters",
                 },
                 onBlur: () => setFocusedField(null),
               })}
@@ -257,14 +257,14 @@ function Register() {
                   : ""
               }`}
             >
-              Mật khẩu
+              Password
             </label>
             <button
               type="button"
               disabled={isWorking}
               onClick={() => setShowPassword((current) => !current)}
               className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-gray-500 hover:text-gray-700"
-              aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               <motion.svg
                 viewBox="0 0 24 24"
@@ -336,9 +336,9 @@ function Register() {
               onFocus={() => setFocusedField("confirmPassword")}
               className="w-full rounded-xl bg-transparent px-3 pt-5 pb-2.5 pr-11 text-sm outline-none"
               {...register("confirmPassword", {
-                required: "Vui lòng xác nhận mật khẩu",
+                required: "Please confirm your password",
                 validate: (value) =>
-                  value === passwordValue || "Mật khẩu không khớp",
+                  value === passwordValue || "Passwords do not match",
                 onBlur: () => setFocusedField(null),
               })}
             />
@@ -351,14 +351,16 @@ function Register() {
                   : ""
               }`}
             >
-              Xác nhận mật khẩu
+              Confirm password
             </label>
             <button
               type="button"
               disabled={isWorking}
               onClick={() => setShowConfirmPassword((current) => !current)}
               className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-gray-500 hover:text-gray-700"
-              aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              aria-label={
+                showConfirmPassword ? "Hide password" : "Show password"
+              }
             >
               <motion.svg
                 viewBox="0 0 24 24"
@@ -433,7 +435,7 @@ function Register() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  Đăng ký
+                  Register
                 </motion.span>
               ) : null}
 
@@ -493,9 +495,9 @@ function Register() {
       </motion.form>
 
       <p className="mt-5 text-center text-sm text-gray-600">
-        Đã có tài khoản?{" "}
+        Already have an account?{" "}
         <Link to="/login" className="font-medium text-blue-600 hover:underline">
-          Đăng nhập
+          Sign in
         </Link>
       </p>
     </div>

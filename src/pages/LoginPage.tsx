@@ -1,8 +1,8 @@
 function LoginPage() {
   return (
     <div>
-      <h1>Đăng nhập Jira Mini</h1>
-      <p>Trang đăng nhập cơ bản.</p>
+      <h1>Sign in to Jira Mini</h1>
+      <p>Basic sign-in page.</p>
     </div>
   );
 }

@@ -21,7 +21,7 @@ function PublicLayout() {
               to="/"
               className="rounded-md px-3 py-1.5 text-sm text-gray-600 transition hover:bg-gray-100"
             >
-              Trang chủ
+              Home
             </Link>
             <Link
               to="/about"
@@ -41,14 +41,14 @@ function PublicLayout() {
                 to="/projects"
                 className="ml-1 rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-blue-700"
               >
-                Vào dự án
+                Go to projects
               </Link>
             ) : (
               <Link
                 to="/login"
                 className="ml-1 rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-blue-700"
               >
-                Đăng nhập
+                Sign in
               </Link>
             )}
           </nav>

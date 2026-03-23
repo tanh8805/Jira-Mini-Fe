@@ -26,7 +26,7 @@ function PrivateLayout() {
     try {
       await logoutApi();
     } catch {
-      toast.error("Không thể đăng xuất. Vui lòng thử lại.");
+      toast.error("Unable to sign out. Please try again.");
     } finally {
       navigate("/", { replace: true });
     }
@@ -49,7 +49,7 @@ function PrivateLayout() {
                 to="/"
                 className="rounded-md px-3 py-1.5 text-sm text-gray-600 transition hover:bg-gray-100"
               >
-                Trang chủ
+                Home
               </Link>
               <Link
                 to="/about"
@@ -67,7 +67,7 @@ function PrivateLayout() {
                 to="/projects"
                 className="ml-1 rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-blue-700"
               >
-                Vào dự án
+                Go to projects
               </Link>
             </nav>
           </div>
@@ -100,7 +100,7 @@ function PrivateLayout() {
                   onClick={onLogout}
                   className="w-full rounded-md px-3 py-2 text-left text-sm font-medium text-red-600 transition hover:bg-red-50"
                 >
-                  Đăng xuất
+                  Sign out
                 </button>
               </div>
             ) : null}

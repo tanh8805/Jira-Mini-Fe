@@ -100,7 +100,7 @@ function ProjectBoard() {
         const data = await getProjectMembersApi(effectiveProjectId);
         setMembers(data);
       } catch {
-        toast.error("Không thể tải danh sách thành viên");
+        toast.error("Unable to load members list");
       }
     };
 
@@ -118,7 +118,7 @@ function ProjectBoard() {
         const data = await getTasksApi(effectiveProjectId, taskFilters);
         setTasks(data);
       } catch {
-        toast.error("Không thể tải danh sách công việc");
+        toast.error("Unable to load task list");
       } finally {
         setIsLoading(false);
       }
@@ -131,7 +131,7 @@ function ProjectBoard() {
     return (
       <section className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
         <p className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-600">
-          Không tìm thấy projectId hợp lệ.
+          Valid project ID was not found.
         </p>
       </section>
     );
@@ -175,13 +175,13 @@ function ProjectBoard() {
     try {
       const createdTask = await createTaskApi(effectiveProjectId, payload);
       setTasks((currentTasks) => [createdTask, ...currentTasks]);
-      toast.success("Tạo công việc thành công");
+      toast.success("Task created successfully");
       closeTaskModal();
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
-        setModalError("Dữ liệu không hợp lệ");
+        setModalError("Invalid data");
       } else {
-        setModalError("Không thể tạo công việc. Vui lòng thử lại.");
+        setModalError("Unable to create task. Please try again.");
       }
     } finally {
       setIsModalSubmitting(false);
@@ -213,13 +213,13 @@ function ProjectBoard() {
         ),
       );
 
-      toast.success("Đã lưu thay đổi công việc");
+      toast.success("Task changes saved");
       closeTaskModal();
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
-        setModalError("Dữ liệu không hợp lệ");
+        setModalError("Invalid data");
       } else {
-        setModalError("Không thể lưu thay đổi. Vui lòng thử lại.");
+        setModalError("Unable to save changes. Please try again.");
       }
     } finally {
       setIsModalSubmitting(false);
@@ -235,10 +235,10 @@ function ProjectBoard() {
       setTasks((currentTasks) =>
         currentTasks.filter((task) => task.id !== taskId),
       );
-      toast.success("Đã xóa công việc");
+      toast.success("Task deleted");
       closeTaskModal();
     } catch {
-      setModalError("Không thể xóa công việc. Vui lòng thử lại.");
+      setModalError("Unable to delete task. Please try again.");
     } finally {
       setIsModalSubmitting(false);
     }
@@ -246,13 +246,13 @@ function ProjectBoard() {
 
   return (
     <section className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
-      <header className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">
-            {projectName || "Project"} {">"} Bảng công việc
+      <header className="mb-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="w-full sm:w-auto">
+          <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
+            {projectName || "Project"} {">"} Task Board
           </h1>
           <p className="mt-1 text-sm text-gray-600">
-            Quyền của bạn trong project:{" "}
+            Your role in this project:{" "}
             <span
               className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
                 currentUserRole
@@ -265,13 +265,13 @@ function ProjectBoard() {
           </p>
           <div className="mt-2 flex items-center gap-3 text-sm">
             <span className="rounded-md bg-blue-50 px-2 py-1 font-medium text-blue-700">
-              Bảng công việc
+              Task Board
             </span>
             <Link
               to={`/projects/${effectiveProjectId}/members`}
               className="rounded-md px-2 py-1 text-gray-600 hover:bg-gray-100"
             >
-              Thành viên
+              Members
             </Link>
           </div>
         </div>
@@ -279,19 +279,19 @@ function ProjectBoard() {
         <button
           type="button"
           onClick={(event) => openCreateTaskModal(event)}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+          className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
         >
-          + Tạo công việc
+          + Create task
         </button>
       </header>
 
-      <div className="mb-5 grid grid-cols-1 gap-3 rounded-xl bg-white p-4 ring-1 ring-gray-200 sm:grid-cols-3">
+      <div className="mb-5 grid grid-cols-1 gap-3 rounded-xl bg-white p-4 ring-1 ring-gray-200 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <label
             htmlFor="statusFilter"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
-            Trạng thái
+            Status
           </label>
           <select
             id="statusFilter"
@@ -301,7 +301,7 @@ function ProjectBoard() {
             }
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           >
-            <option value="ALL">Tất cả</option>
+            <option value="ALL">All</option>
             <option value="TODO">TODO</option>
             <option value="IN_PROGRESS">IN_PROGRESS</option>
             <option value="DONE">DONE</option>
@@ -313,7 +313,7 @@ function ProjectBoard() {
             htmlFor="priorityFilter"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
-            Ưu tiên
+            Priority
           </label>
           <select
             id="priorityFilter"
@@ -323,19 +323,19 @@ function ProjectBoard() {
             }
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           >
-            <option value="ALL">Tất cả</option>
+            <option value="ALL">All</option>
             <option value="LOW">LOW</option>
             <option value="MEDIUM">MEDIUM</option>
             <option value="HIGH">HIGH</option>
           </select>
         </div>
 
-        <div>
+        <div className="sm:col-span-2 lg:col-span-1">
           <label
             htmlFor="assigneeFilter"
             className="mb-1 block text-sm font-medium text-gray-700"
           >
-            Người phụ trách
+            Assignee
           </label>
           <select
             id="assigneeFilter"
@@ -343,7 +343,7 @@ function ProjectBoard() {
             onChange={(event) => setAssigneeFilter(event.target.value)}
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           >
-            <option value="ALL">Tất cả</option>
+            <option value="ALL">All</option>
             {members.map((member) => (
               <option key={member.id} value={member.id}>
                 {member.fullName}

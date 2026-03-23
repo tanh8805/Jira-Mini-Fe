@@ -7,11 +7,11 @@ function AboutPage() {
       <RevealOnScroll>
         <section className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-            Về Jira Mini
+            About Jira Mini
           </h1>
           <p className="mx-auto mt-4 max-w-3xl text-gray-600">
-            Jira Mini được xây dựng để giải quyết nhu cầu quản trị dự án nhanh,
-            rõ ràng và dễ mở rộng cho team sản phẩm hiện đại.
+            Jira Mini was built to meet the need for fast, clear, and scalable
+            project management for modern product teams.
           </p>
         </section>
       </RevealOnScroll>
@@ -35,13 +35,13 @@ function AboutPage() {
 
         <div>
           <h2 className="text-2xl font-semibold text-gray-900">
-            Câu chuyện & Động lực
+            Story & Motivation
           </h2>
           <p className="mt-3 text-gray-600">
-            Chúng tôi nhận thấy nhiều công cụ quản lý hiện tại mạnh nhưng quá
-            nặng cho các team nhỏ. Jira Mini ra đời để giữ các chức năng cốt lõi
-            nhất: board kéo-thả, phân quyền theo project và audit lịch sử, giúp
-            team tập trung vào delivery thay vì cấu hình phức tạp.
+            We noticed many existing management tools are powerful but too heavy
+            for small teams. Jira Mini focuses on core capabilities: drag-and-
+            drop boards, project-based roles, and audit history so teams can
+            focus on delivery instead of complex setup.
           </p>
         </div>
       </RevealOnScroll>
@@ -60,10 +60,10 @@ function AboutPage() {
               <path d="M3 20h18" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Sứ mệnh</h3>
+          <h3 className="text-xl font-semibold text-gray-900">Mission</h3>
           <p className="mt-2 text-gray-600">
-            Đưa một trải nghiệm quản trị dự án nhẹ, trực quan và thống nhất đến
-            mọi nhóm phát triển sản phẩm.
+            Deliver a lightweight, intuitive, and consistent project management
+            experience to every product team.
           </p>
         </RevealOnScroll>
 
@@ -83,19 +83,17 @@ function AboutPage() {
               <path d="M12 3v18" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">
-            Giá trị cốt lõi
-          </h3>
+          <h3 className="text-xl font-semibold text-gray-900">Core Values</h3>
           <p className="mt-2 text-gray-600">
-            Đơn giản, minh bạch, tốc độ cao. Mọi thành phần đều phục vụ một mục
-            tiêu: giúp team phối hợp hiệu quả hơn mỗi ngày.
+            Simplicity, transparency, and speed. Every part serves one goal:
+            helping teams collaborate more effectively every day.
           </p>
         </RevealOnScroll>
       </div>
 
       <RevealOnScroll className="mt-10 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
         <h2 className="text-2xl font-semibold text-gray-900">
-          Đội ngũ phát triển
+          Development Team
         </h2>
         <div className="mt-5 max-w-sm">
           <article className="card-lift rounded-xl border border-gray-200 bg-gray-50 p-5">
@@ -135,7 +133,7 @@ function AboutPage() {
           to="/contact"
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
         >
-          Liên hệ đội ngũ
+          Contact the Team
         </Link>
       </div>
     </main>

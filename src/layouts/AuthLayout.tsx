@@ -42,7 +42,7 @@ function AuthLayout() {
                   Jira Mini Workspace
                 </p>
                 <p className="mt-2 text-sm font-semibold leading-relaxed text-white">
-                  Đồng bộ đội nhóm và quản lý task mượt mà trên mọi thiết bị.
+                  Keep teams aligned and manage tasks smoothly on any device.
                 </p>
               </div>
             </div>
@@ -111,9 +111,9 @@ function AuthLayout() {
                   transition={{ duration: 0.22, delay: 0.02 }}
                   className="mt-4 text-3xl font-semibold leading-tight"
                 >
-                  Cộng tác liền mạch.
+                  Seamless collaboration.
                   <br />
-                  Quản lý dự án tinh gọn.
+                  Lean project management.
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
@@ -121,7 +121,8 @@ function AuthLayout() {
                   transition={{ duration: 0.22, delay: 0.04 }}
                   className="mt-4 text-sm leading-relaxed text-white/90"
                 >
-                  “Nhóm mạnh không phải nhóm đông, mà là nhóm đồng bộ.”
+                  “Strong teams are not the biggest teams, but the most aligned
+                  ones.”
                 </motion.p>
 
                 <motion.div
@@ -130,10 +131,10 @@ function AuthLayout() {
                   transition={{ duration: 0.22, delay: 0.06 }}
                   className="mt-6 rounded-2xl border border-white/35 bg-white/15 p-4"
                 >
-                  <p className="text-xs text-white/75">Đã đồng hành cùng</p>
-                  <p className="mt-1 text-2xl font-bold">10,000+ dự án</p>
+                  <p className="text-xs text-white/75">Trusted by</p>
+                  <p className="mt-1 text-2xl font-bold">10,000+ projects</p>
                   <p className="text-sm text-white/85">
-                    và hàng nghìn team làm việc hiệu quả mỗi ngày.
+                    and thousands of teams working effectively every day.
                   </p>
                 </motion.div>
               </motion.article>

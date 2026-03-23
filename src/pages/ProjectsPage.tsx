@@ -2,7 +2,7 @@ function ProjectsPage() {
   return (
     <div>
       <h1>Projects</h1>
-      <p>Danh sách project cơ bản.</p>
+      <p>Basic project list page.</p>
     </div>
   );
 }

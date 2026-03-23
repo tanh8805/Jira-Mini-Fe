@@ -37,7 +37,7 @@ function ContactPage() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSending(false);
     reset();
-    toast.success("Đã gửi tin nhắn thành công");
+    toast.success("Message sent successfully");
   };
 
   return (
@@ -48,7 +48,7 @@ function ContactPage() {
             Contact
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-gray-600">
-            Hãy để lại lời nhắn, chúng tôi sẽ phản hồi trong 24h.
+            Leave us a message and we will respond within 24 hours.
           </p>
         </section>
       </RevealOnScroll>
@@ -107,8 +107,8 @@ function ContactPage() {
                 </svg>
               </div>
               <div>
-                <p className="text-sm font-semibold text-gray-900">Văn phòng</p>
-                <p className="text-sm text-gray-600">Hà Nội</p>
+                <p className="text-sm font-semibold text-gray-900">Office</p>
+                <p className="text-sm text-gray-600">Hanoi</p>
               </div>
             </article>
           </div>
@@ -119,7 +119,7 @@ function ContactPage() {
                 to="/login"
                 className="btn-gradient inline-flex rounded-lg px-4 py-2 text-sm font-semibold text-white"
               >
-                Vào ứng dụng
+                Go to app
               </Link>
             </div>
           ) : null}
@@ -129,22 +129,24 @@ function ContactPage() {
           className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200"
           delayMs={90}
         >
-          <h2 className="text-xl font-semibold text-gray-900">Gửi tin nhắn</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Send a message
+          </h2>
           <form className="mt-4 space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label
                 className="mb-1 block text-sm font-medium text-gray-700"
                 htmlFor="fullName"
               >
-                Họ tên
+                Full name
               </label>
               <input
                 id="fullName"
                 type="text"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 {...register("fullName", {
-                  required: "Họ tên là bắt buộc",
-                  maxLength: { value: 100, message: "Tối đa 100 ký tự" },
+                  required: "Full name is required",
+                  maxLength: { value: 100, message: "Maximum 100 characters" },
                 })}
               />
               {errors.fullName ? (
@@ -166,12 +168,12 @@ function ContactPage() {
                 type="email"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 {...register("email", {
-                  required: "Email là bắt buộc",
+                  required: "Email is required",
                   pattern: {
                     value: emailPattern,
-                    message: "Email không đúng định dạng",
+                    message: "Invalid email format",
                   },
-                  maxLength: { value: 100, message: "Tối đa 100 ký tự" },
+                  maxLength: { value: 100, message: "Maximum 100 characters" },
                 })}
               />
               {errors.email ? (
@@ -186,15 +188,15 @@ function ContactPage() {
                 className="mb-1 block text-sm font-medium text-gray-700"
                 htmlFor="subject"
               >
-                Tiêu đề
+                Subject
               </label>
               <input
                 id="subject"
                 type="text"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 {...register("subject", {
-                  required: "Tiêu đề là bắt buộc",
-                  maxLength: { value: 100, message: "Tối đa 100 ký tự" },
+                  required: "Subject is required",
+                  maxLength: { value: 100, message: "Maximum 100 characters" },
                 })}
               />
               {errors.subject ? (
@@ -209,15 +211,18 @@ function ContactPage() {
                 className="mb-1 block text-sm font-medium text-gray-700"
                 htmlFor="message"
               >
-                Nội dung lời nhắn
+                Message
               </label>
               <textarea
                 id="message"
                 rows={5}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 {...register("message", {
-                  required: "Nội dung là bắt buộc",
-                  maxLength: { value: 2000, message: "Tối đa 2000 ký tự" },
+                  required: "Message is required",
+                  maxLength: {
+                    value: 2000,
+                    message: "Maximum 2000 characters",
+                  },
                 })}
               />
               {errors.message ? (
@@ -235,10 +240,10 @@ function ContactPage() {
               {isSending ? (
                 <>
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                  Đang gửi...
+                  Sending...
                 </>
               ) : (
-                "Gửi tin nhắn"
+                "Send message"
               )}
             </button>
           </form>

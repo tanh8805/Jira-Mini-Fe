@@ -7,13 +7,14 @@ function SiteFooter() {
         <div>
           <p className="text-lg font-semibold text-gray-900">Jira Mini</p>
           <p className="mt-2 max-w-sm text-sm text-gray-600">
-            Nền tảng quản lý dự án gọn nhẹ, tối ưu cho teamwork hiện đại.
+            A lightweight project management platform optimized for modern
+            teamwork.
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
           <div>
-            <p className="text-sm font-semibold text-gray-900">Liên kết</p>
+            <p className="text-sm font-semibold text-gray-900">Links</p>
             <ul className="mt-2 space-y-2 text-sm text-gray-600">
               <li>
                 <Link to="/" className="hover:text-blue-700">
@@ -34,11 +35,11 @@ function SiteFooter() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-gray-900">Pháp lý</p>
+            <p className="text-sm font-semibold text-gray-900">Legal</p>
             <ul className="mt-2 space-y-2 text-sm text-gray-600">
               <li>
                 <Link to="/terms" className="hover:text-blue-700">
-                  Điều khoản
+                  Terms
                 </Link>
               </li>
               <li>

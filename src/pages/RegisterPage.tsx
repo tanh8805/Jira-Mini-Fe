@@ -1,8 +1,8 @@
 function RegisterPage() {
   return (
     <div>
-      <h1>Tạo tài khoản mới</h1>
-      <p>Trang đăng ký cơ bản.</p>
+      <h1>Create a new account</h1>
+      <p>Basic registration page.</p>
     </div>
   );
 }

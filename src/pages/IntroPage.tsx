@@ -68,15 +68,15 @@ function IntroPage() {
             transition={{ duration: 0.24, ease: easeOut }}
             className="mt-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl"
           >
-            Quản lý dự án gọn nhẹ cho đội nhóm vừa và nhỏ
+            Lightweight project management for small and medium teams
           </motion.h1>
           <motion.p
             variants={heroItem}
             transition={{ duration: 0.24, ease: easeOut }}
             className="mt-4 text-base text-gray-600 sm:text-lg"
           >
-            Theo dõi công việc theo Kanban, phân vai thành viên theo dự án, và
-            lưu lịch sử thay đổi đầy đủ để cả team luôn đồng bộ.
+            Track tasks with Kanban, manage project-based member roles, and keep
+            a full change history so your team stays aligned.
           </motion.p>
 
           <motion.div
@@ -88,19 +88,19 @@ function IntroPage() {
               to={isAuthenticated ? "/projects" : "/login"}
               className="btn-gradient rounded-lg px-5 py-3 text-sm font-semibold text-white"
             >
-              {isAuthenticated ? "Vào dự án" : "Bắt đầu ngay"}
+              {isAuthenticated ? "Go to projects" : "Get started"}
             </Link>
             <Link
               to="/about"
               className="card-lift rounded-lg border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
             >
-              Tìm hiểu thêm
+              Learn more
             </Link>
             <Link
               to="/contact"
               className="card-lift rounded-lg border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
             >
-              Liên hệ
+              Contact
             </Link>
           </motion.div>
         </motion.div>
@@ -149,7 +149,7 @@ function IntroPage() {
       <section className="mx-auto w-full max-w-6xl px-6 pb-16">
         <RevealOnScroll>
           <h2 className="mb-8 text-center text-3xl font-bold text-gray-900">
-            Tính năng nổi bật
+            Key Features
           </h2>
         </RevealOnScroll>
 
@@ -167,11 +167,11 @@ function IntroPage() {
             <RevealOnScroll className="grid items-center gap-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 md:grid-cols-2">
               <div>
                 <h3 className="text-2xl font-semibold text-gray-900">
-                  Kanban Board kéo thả mượt mà
+                  Smooth drag-and-drop Kanban board
                 </h3>
                 <p className="mt-2 text-gray-600">
-                  Chuyển trạng thái công việc bằng kéo-thả với cập nhật tức thì,
-                  giúp team luôn theo dõi tiến độ real-time.
+                  Move tasks across columns with instant updates so your team
+                  can monitor progress in real time.
                 </p>
               </div>
               <div className="rounded-xl bg-linear-to-br from-blue-100 to-indigo-100 p-6">
@@ -210,11 +210,11 @@ function IntroPage() {
               </div>
               <div className="order-1 md:order-2">
                 <h3 className="text-2xl font-semibold text-gray-900">
-                  Phân quyền Project rõ ràng
+                  Clear project role permissions
                 </h3>
                 <p className="mt-2 text-gray-600">
-                  Vai trò theo dự án giúp kiểm soát thao tác tạo/sửa/xóa và tăng
-                  mức an toàn khi cộng tác nhiều thành viên.
+                  Project roles help control create/edit/delete actions and
+                  improve safety when collaborating with multiple members.
                 </p>
               </div>
             </RevealOnScroll>
@@ -227,23 +227,23 @@ function IntroPage() {
             <RevealOnScroll className="grid items-center gap-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 md:grid-cols-2">
               <div>
                 <h3 className="text-2xl font-semibold text-gray-900">
-                  Audit Trail minh bạch
+                  Transparent audit trail
                 </h3>
                 <p className="mt-2 text-gray-600">
-                  Theo dõi đầy đủ lịch sử thay đổi task theo timeline để truy
-                  vết nhanh và làm việc minh bạch hơn.
+                  Track full task history in a timeline for faster tracing and
+                  more transparent collaboration.
                 </p>
               </div>
               <div className="rounded-xl bg-linear-to-br from-violet-100 to-fuchsia-100 p-6">
                 <div className="space-y-2 text-xs text-slate-700">
                   <div className="rounded-lg bg-white p-3">
-                    09:15 - Trạng thái: TODO ➔ IN_PROGRESS
+                    09:15 - Status: TODO ➔ IN_PROGRESS
                   </div>
                   <div className="rounded-lg bg-white p-3">
                     09:22 - Priority: MEDIUM ➔ HIGH
                   </div>
                   <div className="rounded-lg bg-white p-3">
-                    09:41 - Assignee: Lan ➔ Nam
+                    09:41 - Assignee: Alex ➔ Sam
                   </div>
                 </div>
               </div>
@@ -255,11 +255,10 @@ function IntroPage() {
       <section className="mx-auto w-full max-w-6xl px-6 pb-16">
         <RevealOnScroll>
           <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
-            Công nghệ sử dụng
+            Technology Stack
           </h2>
           <p className="mb-6 text-center text-gray-600">
-            Frontend & backend stack cho khả năng mở rộng và triển khai linh
-            hoạt.
+            Frontend and backend stack for scalable and flexible deployment.
           </p>
         </RevealOnScroll>
 
@@ -302,11 +301,11 @@ function IntroPage() {
           <div className="flex flex-col items-start justify-between gap-5 md:flex-row md:items-center">
             <div>
               <h3 className="text-2xl font-bold">
-                Sẵn sàng tối ưu hóa quy trình của bạn chưa?
+                Ready to optimize your workflow?
               </h3>
               <p className="mt-2 text-blue-100">
-                Bắt đầu với Jira Mini và đưa toàn bộ dự án của bạn vào một quy
-                trình thống nhất.
+                Start with Jira Mini and bring your entire project into one
+                streamlined process.
               </p>
             </div>
 
@@ -314,7 +313,7 @@ function IntroPage() {
               to={isAuthenticated ? "/projects" : "/login"}
               className="rounded-lg bg-white px-5 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-50"
             >
-              Bắt đầu ngay miễn phí
+              Start free now
             </Link>
           </div>
         </RevealOnScroll>

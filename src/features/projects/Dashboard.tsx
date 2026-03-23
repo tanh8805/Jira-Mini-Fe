@@ -144,7 +144,7 @@ function Dashboard() {
       setProjects(data);
       await hydrateProjectMeta(data);
     } catch {
-      toast.error("Không thể tải danh sách dự án", {
+      toast.error("Unable to load project list", {
         id: "projects-load-error",
       });
       setProjectMeta({});
@@ -189,7 +189,9 @@ function Dashboard() {
   };
 
   const onDeleteProject = async (projectId: string) => {
-    const confirmed = window.confirm("Bạn có chắc chắn muốn xóa dự án này?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this project?",
+    );
 
     if (!confirmed) {
       return;
@@ -197,10 +199,10 @@ function Dashboard() {
 
     try {
       await deleteProjectApi(projectId);
-      toast.success("Đã xóa dự án");
+      toast.success("Project deleted");
       await fetchProjects();
     } catch {
-      toast.error("Không thể xóa dự án");
+      toast.error("Unable to delete project");
     } finally {
       setOpenMenuProjectId(null);
     }
@@ -225,15 +227,17 @@ function Dashboard() {
       onCloseCreate();
       await fetchProjects();
       toast.success(
-        editingProject ? "Cập nhật dự án thành công" : "Tạo dự án thành công",
+        editingProject
+          ? "Project updated successfully"
+          : "Project created successfully",
       );
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
-        setCreateError("Dữ liệu không hợp lệ");
+        setCreateError("Invalid data");
         return;
       }
 
-      setCreateError("Không thể tạo dự án. Vui lòng thử lại.");
+      setCreateError("Unable to save project. Please try again.");
     }
   };
 
@@ -255,15 +259,13 @@ function Dashboard() {
   return (
     <section className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold text-gray-900">
-          Các dự án của tôi
-        </h1>
+        <h1 className="text-2xl font-semibold text-gray-900">My projects</h1>
         <button
           type="button"
           onClick={(event) => onOpenCreate(event)}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
         >
-          + Tạo dự án mới
+          + Create new project
         </button>
       </header>
 
@@ -283,7 +285,7 @@ function Dashboard() {
         <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
           <article className="rounded-xl bg-white p-4 ring-1 ring-gray-200">
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Tổng số dự án
+              Total projects
             </p>
             <p className="mt-2 text-2xl font-bold text-gray-900">
               {summary.totalProjects}
@@ -291,7 +293,7 @@ function Dashboard() {
           </article>
           <article className="rounded-xl bg-white p-4 ring-1 ring-gray-200">
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Task đang thực hiện
+              Tasks in progress
             </p>
             <p className="mt-2 text-2xl font-bold text-amber-600">
               {summary.inProgressTasks}
@@ -299,7 +301,7 @@ function Dashboard() {
           </article>
           <article className="rounded-xl bg-white p-4 ring-1 ring-gray-200">
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Task hoàn thành tuần này
+              Tasks completed this week
             </p>
             <p className="mt-2 text-2xl font-bold text-emerald-600">
               {summary.doneThisWeek}
@@ -347,7 +349,7 @@ function Dashboard() {
             </svg>
           </div>
           <p className="text-sm font-medium text-gray-500">
-            Bạn chưa tham gia dự án nào
+            You have not joined any projects yet
           </p>
         </div>
       ) : null}
@@ -377,7 +379,7 @@ function Dashboard() {
                       )
                     }
                     className="rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100"
-                    aria-label="Mở tùy chọn dự án"
+                    aria-label="Open project options"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -398,14 +400,14 @@ function Dashboard() {
                         onClick={() => onOpenEdit(project)}
                         className="w-full rounded-md px-3 py-2 text-left text-sm text-gray-700 transition hover:bg-gray-50"
                       >
-                        Chỉnh sửa
+                        Edit
                       </button>
                       <button
                         type="button"
                         onClick={() => void onDeleteProject(project.id)}
                         className="w-full rounded-md px-3 py-2 text-left text-sm text-red-600 transition hover:bg-red-50"
                       >
-                        Xóa
+                        Delete
                       </button>
                     </div>
                   ) : null}
@@ -420,12 +422,12 @@ function Dashboard() {
                 <p className="mb-4 line-clamp-3 min-h-18 text-sm text-gray-500">
                   {(typeof project.description === "string"
                     ? project.description.trim()
-                    : "") || "Không có mô tả"}
+                    : "") || "No description"}
                 </p>
 
                 <div className="mb-4">
                   <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
-                    <span>Tiến độ</span>
+                    <span>Progress</span>
                     <span>
                       {projectMeta[project.id]?.totalTasks
                         ? Math.round(
@@ -457,8 +459,8 @@ function Dashboard() {
 
                 <div className="flex items-end justify-between gap-3">
                   <p className="text-xs text-gray-400">
-                    Tạo ngày:{" "}
-                    {new Date(project.createdAt).toLocaleDateString("vi-VN")}
+                    Created on:{" "}
+                    {new Date(project.createdAt).toLocaleDateString("en-US")}
                   </p>
 
                   <div className="flex -space-x-2">
@@ -489,7 +491,7 @@ function Dashboard() {
             }}
           >
             <h2 className="mb-4 text-xl font-semibold text-gray-900">
-              {editingProject ? "Chỉnh sửa dự án" : "Tạo dự án mới"}
+              {editingProject ? "Edit project" : "Create new project"}
             </h2>
 
             <form className="space-y-4" onSubmit={handleSubmit(onSubmitCreate)}>
@@ -498,21 +500,20 @@ function Dashboard() {
                   htmlFor="projectName"
                   className="mb-1 block text-sm font-medium text-gray-700"
                 >
-                  Tên dự án
+                  Project name
                 </label>
                 <input
                   id="projectName"
                   type="text"
                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   {...register("name", {
-                    required: "Tên dự án là bắt buộc",
+                    required: "Project name is required",
                     maxLength: {
                       value: 100,
-                      message: "Tên dự án không được vượt quá 100 ký tự",
+                      message: "Project name must not exceed 100 characters",
                     },
                     validate: (value) =>
-                      value.trim().length > 0 ||
-                      "Tên dự án không được để trống",
+                      value.trim().length > 0 || "Project name cannot be blank",
                   })}
                 />
                 {errors.name ? (
@@ -527,7 +528,7 @@ function Dashboard() {
                   htmlFor="projectDescription"
                   className="mb-1 block text-sm font-medium text-gray-700"
                 >
-                  Mô tả
+                  Description
                 </label>
                 <textarea
                   id="projectDescription"
@@ -536,7 +537,7 @@ function Dashboard() {
                   {...register("description", {
                     maxLength: {
                       value: 2000,
-                      message: "Mô tả không được vượt quá 2000 ký tự",
+                      message: "Description must not exceed 2000 characters",
                     },
                   })}
                 />
@@ -559,7 +560,7 @@ function Dashboard() {
                   onClick={onCloseCreate}
                   className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
                 >
-                  Hủy
+                  Cancel
                 </button>
                 <button
                   type="submit"
@@ -567,10 +568,10 @@ function Dashboard() {
                   className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isSubmitting
-                    ? "Đang lưu..."
+                    ? "Saving..."
                     : editingProject
-                      ? "Lưu thay đổi"
-                      : "Lưu"}
+                      ? "Save changes"
+                      : "Save"}
                 </button>
               </div>
             </form>

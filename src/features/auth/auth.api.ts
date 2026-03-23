@@ -52,7 +52,7 @@ export const setUserDisplayLabel = (label: string): void => {
 }
 
 export const getUserDisplayLabel = (): string => {
-  return localStorage.getItem(USER_DISPLAY_LABEL_KEY) ?? 'Tài khoản'
+  return localStorage.getItem(USER_DISPLAY_LABEL_KEY) ?? 'Account'
 }
 
 export const clearUserDisplayLabel = (): void => {

@@ -56,13 +56,13 @@ function Login() {
       setSubmitState("idle");
 
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        setServerError("Email hoặc mật khẩu không đúng");
+        setServerError("Incorrect email or password");
         setShouldShake(true);
         window.setTimeout(() => setShouldShake(false), 360);
         return;
       }
 
-      setServerError("Đăng nhập thất bại. Vui lòng thử lại.");
+      setServerError("Sign-in failed. Please try again.");
       setShouldShake(true);
       window.setTimeout(() => setShouldShake(false), 360);
     }
@@ -71,10 +71,10 @@ function Login() {
   return (
     <div className="w-full rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-200 sm:p-8">
       <h1 className="mb-2 text-center text-xl font-semibold text-gray-900 sm:text-2xl">
-        Đăng nhập Jira Mini
+        Sign in to Jira Mini
       </h1>
       <p className="mb-6 text-center text-sm text-gray-500">
-        Chào mừng quay trở lại không gian làm việc của bạn.
+        Welcome back to your workspace.
       </p>
 
       <form
@@ -96,14 +96,14 @@ function Login() {
               onFocus={() => setFocusedField("email")}
               className="w-full rounded-xl bg-transparent px-3 pt-5 pb-2.5 text-sm outline-none"
               {...register("email", {
-                required: "Email là bắt buộc",
+                required: "Email is required",
                 maxLength: {
                   value: 100,
-                  message: "Email không được vượt quá 100 ký tự",
+                  message: "Email must not exceed 100 characters",
                 },
                 pattern: {
                   value: emailPattern,
-                  message: "Email không đúng định dạng",
+                  message: "Invalid email format",
                 },
                 onBlur: () => setFocusedField(null),
               })}
@@ -149,14 +149,14 @@ function Login() {
               onFocus={() => setFocusedField("password")}
               className="w-full rounded-xl bg-transparent px-3 pt-5 pb-2.5 pr-11 text-sm outline-none"
               {...register("password", {
-                required: "Mật khẩu là bắt buộc",
+                required: "Password is required",
                 minLength: {
                   value: 7,
-                  message: "Mật khẩu phải lớn hơn 6 ký tự",
+                  message: "Password must be at least 7 characters",
                 },
                 maxLength: {
                   value: 100,
-                  message: "Mật khẩu không được vượt quá 100 ký tự",
+                  message: "Password must not exceed 100 characters",
                 },
                 onBlur: () => setFocusedField(null),
               })}
@@ -169,14 +169,14 @@ function Login() {
                   : ""
               }`}
             >
-              Mật khẩu
+              Password
             </label>
             <button
               type="button"
               disabled={isWorking}
               onClick={() => setShowPassword((current) => !current)}
               className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-gray-500 hover:text-gray-700"
-              aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               <motion.svg
                 viewBox="0 0 24 24"
@@ -250,7 +250,7 @@ function Login() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                Đăng nhập
+                Sign in
               </motion.span>
             ) : null}
 
@@ -305,12 +305,12 @@ function Login() {
       </form>
 
       <p className="mt-5 text-center text-sm text-gray-600">
-        Chưa có tài khoản?{" "}
+        Don&apos;t have an account?{" "}
         <Link
           to="/register"
           className="font-medium text-blue-600 hover:underline"
         >
-          Đăng ký ngay
+          Register now
         </Link>
       </p>
     </div>

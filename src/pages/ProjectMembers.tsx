@@ -86,7 +86,7 @@ function ProjectMembers() {
       const data = await getProjectMembersApi(effectiveProjectId);
       setMembers(data);
     } catch {
-      toast.error("Không thể tải danh sách thành viên");
+      toast.error("Unable to load members list");
     } finally {
       setIsLoading(false);
     }
@@ -139,24 +139,24 @@ function ProjectMembers() {
 
       onCloseAdd();
       await fetchMembers();
-      toast.success("Đã thêm thành viên vào project");
+      toast.success("Member added to project");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 409) {
           setError("email", {
             type: "server",
-            message: "Người dùng đã có trong project",
+            message: "User is already in this project",
           });
           return;
         }
 
         if (error.response?.status === 403) {
-          setServerError("Bạn không có quyền thực hiện hành động này");
+          setServerError("You do not have permission to perform this action");
           return;
         }
       }
 
-      setServerError("Không thể thêm thành viên. Vui lòng thử lại.");
+      setServerError("Unable to add member. Please try again.");
     }
   };
 
@@ -194,11 +194,11 @@ function ProjectMembers() {
   const onRemoveMember = async (targetMember: ProjectMember) => {
     const actionLabel =
       currentMember && targetMember.id === currentMember.id
-        ? "rời project"
-        : "xóa thành viên";
+        ? "leave project"
+        : "remove member";
 
     const confirmed = window.confirm(
-      `Bạn có chắc muốn ${actionLabel} này không?`,
+      `Are you sure you want to ${actionLabel}?`,
     );
 
     if (!confirmed) {
@@ -213,9 +213,9 @@ function ProjectMembers() {
         currentMembers.filter((member) => member.id !== targetMember.id),
       );
       toast.success(
-        actionLabel === "rời project"
-          ? "Bạn đã rời project"
-          : "Đã xóa thành viên khỏi project",
+        actionLabel === "leave project"
+          ? "You have left the project"
+          : "Member removed from project",
       );
 
       if (currentMember && targetMember.id === currentMember.id) {
@@ -225,23 +225,23 @@ function ProjectMembers() {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 400) {
           toast.error(
-            "OWNER không thể tự rời project. Hãy transfer ownership trước.",
+            "OWNER cannot leave the project. Transfer ownership first.",
           );
           return;
         }
 
         if (error.response?.status === 403) {
-          toast.error("Bạn không có quyền thực hiện hành động này");
+          toast.error("You do not have permission to perform this action");
           return;
         }
 
         if (error.response?.status === 404) {
-          toast.error("Không tìm thấy thành viên trong project");
+          toast.error("Project member not found");
           return;
         }
       }
 
-      toast.error("Không thể xóa thành viên. Vui lòng thử lại.");
+      toast.error("Unable to remove member. Please try again.");
     } finally {
       setDeletingMemberId("");
     }
@@ -249,7 +249,7 @@ function ProjectMembers() {
 
   const onDeleteProject = async () => {
     const confirmed = window.confirm(
-      "Xóa project sẽ xóa toàn bộ tasks và members. Bạn có chắc chắn?",
+      "Deleting this project will remove all tasks and members. Are you sure?",
     );
 
     if (!confirmed) {
@@ -260,22 +260,22 @@ function ProjectMembers() {
 
     try {
       await deleteProjectApi(effectiveProjectId);
-      toast.success("Đã xóa project thành công");
+      toast.success("Project deleted successfully");
       navigate("/projects", { replace: true });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 403) {
-          toast.error("Chỉ OWNER mới có quyền xóa project");
+          toast.error("Only OWNER can delete this project");
           return;
         }
 
         if (error.response?.status === 404) {
-          toast.error("Không tìm thấy project");
+          toast.error("Project not found");
           return;
         }
       }
 
-      toast.error("Không thể xóa project. Vui lòng thử lại.");
+      toast.error("Unable to delete project. Please try again.");
     } finally {
       setIsDeletingProject(false);
     }
@@ -285,7 +285,7 @@ function ProjectMembers() {
     return (
       <section className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
         <p className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-600">
-          Không tìm thấy projectId hợp lệ.
+          Valid project ID was not found.
         </p>
       </section>
     );
@@ -296,10 +296,10 @@ function ProjectMembers() {
       <header className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">
-            {projectName || "Project"} {">"} Thành viên
+            {projectName || "Project"} {">"} Members
           </h1>
           <p className="mt-1 text-sm text-gray-600">
-            Quyền của bạn trong project:{" "}
+            Your role in this project:{" "}
             <span
               className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
                 currentUserRole
@@ -315,10 +315,10 @@ function ProjectMembers() {
               to={`/projects/${effectiveProjectId}/tasks`}
               className="rounded-md px-2 py-1 text-gray-600 hover:bg-gray-100"
             >
-              Bảng công việc
+              Task Board
             </Link>
             <span className="rounded-md bg-blue-50 px-2 py-1 font-medium text-blue-700">
-              Thành viên
+              Members
             </span>
           </div>
         </div>
@@ -331,7 +331,7 @@ function ProjectMembers() {
               disabled={isDeletingProject}
               className="rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isDeletingProject ? "Đang xóa..." : "Xóa project"}
+              {isDeletingProject ? "Deleting..." : "Delete project"}
             </button>
           ) : null}
 
@@ -341,7 +341,7 @@ function ProjectMembers() {
               onClick={(event) => onOpenAdd(event)}
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
-              + Thêm thành viên
+              + Add member
             </button>
           ) : null}
         </div>
@@ -355,16 +355,16 @@ function ProjectMembers() {
                 STT
               </th>
               <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Tên thành viên
+                Member name
               </th>
               <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
                 Email
               </th>
               <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Vai trò
+                Role
               </th>
               <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Hành động
+                Action
               </th>
             </tr>
           </thead>
@@ -376,7 +376,7 @@ function ProjectMembers() {
                   colSpan={5}
                   className="px-4 py-8 text-center text-sm text-gray-500"
                 >
-                  Chưa có thành viên nào
+                  No members yet
                 </td>
               </tr>
             ) : null}
@@ -454,10 +454,10 @@ function ProjectMembers() {
                             className="rounded-md bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 opacity-0 transition duration-200 group-hover:opacity-100 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
                           >
                             {deletingMemberId === member.id
-                              ? "Đang xử lý..."
+                              ? "Processing..."
                               : currentMember && currentMember.id === member.id
-                                ? "Rời project"
-                                : "Xóa"}
+                                ? "Leave project"
+                                : "Remove"}
                           </motion.button>
                         ) : (
                           <span className="text-xs text-gray-400">-</span>
@@ -480,7 +480,7 @@ function ProjectMembers() {
             }}
           >
             <h2 className="mb-4 text-xl font-semibold text-gray-900">
-              Thêm thành viên
+              Add member
             </h2>
 
             <form className="space-y-4" onSubmit={handleSubmit(onSubmitAdd)}>
@@ -496,14 +496,14 @@ function ProjectMembers() {
                   type="email"
                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   {...register("email", {
-                    required: "Email là bắt buộc",
+                    required: "Email is required",
                     maxLength: {
                       value: 100,
-                      message: "Email không được vượt quá 100 ký tự",
+                      message: "Email must not exceed 100 characters",
                     },
                     pattern: {
                       value: emailPattern,
-                      message: "Email không đúng định dạng",
+                      message: "Invalid email format",
                     },
                   })}
                 />
@@ -519,7 +519,7 @@ function ProjectMembers() {
                   htmlFor="memberRole"
                   className="mb-1 block text-sm font-medium text-gray-700"
                 >
-                  Vai trò
+                  Role
                 </label>
                 <select
                   id="memberRole"
@@ -544,14 +544,14 @@ function ProjectMembers() {
                   onClick={onCloseAdd}
                   className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
                 >
-                  Hủy
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isSubmitting ? "Đang thêm..." : "Thêm"}
+                  {isSubmitting ? "Adding..." : "Add"}
                 </button>
               </div>
             </form>

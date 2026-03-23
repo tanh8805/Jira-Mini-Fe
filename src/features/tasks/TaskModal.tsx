@@ -103,8 +103,15 @@ function TaskModal({
     const fetchAuditLogs = async () => {
       setIsAuditLoading(true);
       try {
-        const logs = await getTaskAuditLogsApi(task.id);
-        setAuditLogs(logs);
+        const logs = await getTaskAuditLogsApi(task.id, { page: 0, size: 8 });
+        const latestLogs = [...logs]
+          .sort(
+            (first, second) =>
+              new Date(second.createdAt).getTime() -
+              new Date(first.createdAt).getTime(),
+          )
+          .slice(0, 8);
+        setAuditLogs(latestLogs);
       } catch {
         setAuditLogs([]);
       } finally {
@@ -139,16 +146,26 @@ function TaskModal({
   return (
     <div className="modal-backdrop-enter fixed inset-0 z-50 flex items-center justify-center bg-black/35 p-4">
       <div
-        className="modal-surface-enter w-full max-w-5xl rounded-xl bg-white p-6 shadow-xl"
+        className="modal-surface-enter max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
         style={{
           transformOrigin: modalOrigin
             ? `${modalOrigin.x}px ${modalOrigin.y}px`
             : "50% 50%",
         }}
       >
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">
-          {isEditMode ? "Chi tiết công việc" : "Tạo công việc"}
-        </h2>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h2 className="text-xl font-semibold text-gray-900">
+            {isEditMode ? "Task details" : "Create task"}
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 text-lg leading-none text-gray-600 transition hover:bg-gray-50"
+          >
+            ×
+          </button>
+        </div>
 
         <div
           className={isEditMode ? "grid grid-cols-1 gap-6 lg:grid-cols-5" : ""}
@@ -160,20 +177,20 @@ function TaskModal({
                   htmlFor="taskTitle"
                   className="mb-1 block text-sm font-medium text-gray-700"
                 >
-                  Tiêu đề
+                  Title
                 </label>
                 <input
                   id="taskTitle"
                   type="text"
                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   {...register("title", {
-                    required: "Tiêu đề là bắt buộc",
+                    required: "Title is required",
                     maxLength: {
                       value: 100,
-                      message: "Tiêu đề không được vượt quá 100 ký tự",
+                      message: "Title must not exceed 100 characters",
                     },
                     validate: (value) =>
-                      value.trim().length > 0 || "Tiêu đề không được để trống",
+                      value.trim().length > 0 || "Title cannot be blank",
                   })}
                 />
                 {errors.title ? (
@@ -188,7 +205,7 @@ function TaskModal({
                   htmlFor="taskDescription"
                   className="mb-1 block text-sm font-medium text-gray-700"
                 >
-                  Mô tả
+                  Description
                 </label>
                 <textarea
                   id="taskDescription"
@@ -197,7 +214,7 @@ function TaskModal({
                   {...register("description", {
                     maxLength: {
                       value: 2000,
-                      message: "Mô tả không được vượt quá 2000 ký tự",
+                      message: "Description must not exceed 2000 characters",
                     },
                   })}
                 />
@@ -214,7 +231,7 @@ function TaskModal({
                     htmlFor="taskPriority"
                     className="mb-1 block text-sm font-medium text-gray-700"
                   >
-                    Độ ưu tiên
+                    Priority
                   </label>
                   <select
                     id="taskPriority"
@@ -232,14 +249,14 @@ function TaskModal({
                     htmlFor="taskAssignee"
                     className="mb-1 block text-sm font-medium text-gray-700"
                   >
-                    Người phụ trách
+                    Assignee
                   </label>
                   <select
                     id="taskAssignee"
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     {...register("assigneeId")}
                   >
-                    <option value="">Chưa phân công</option>
+                    <option value="">Unassigned</option>
                     {members.map((member) => (
                       <option key={member.id} value={member.id}>
                         {member.fullName} ({member.email})
@@ -255,7 +272,7 @@ function TaskModal({
                     htmlFor="taskStatus"
                     className="mb-1 block text-sm font-medium text-gray-700"
                   >
-                    Trạng thái
+                    Status
                   </label>
                   <select
                     id="taskStatus"
@@ -283,29 +300,22 @@ function TaskModal({
                       onClick={() => setConfirmDelete(true)}
                       className="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-100"
                     >
-                      Xóa công việc
+                      Delete task
                     </button>
                   ) : null}
                 </div>
 
                 <div className="flex items-center gap-3">
                   <button
-                    type="button"
-                    onClick={onClose}
-                    className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-                  >
-                    Hủy
-                  </button>
-                  <button
                     type="submit"
                     disabled={isSubmitting}
                     className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSubmitting
-                      ? "Đang xử lý..."
+                      ? "Processing..."
                       : isEditMode
-                        ? "Lưu thay đổi"
-                        : "Tạo"}
+                        ? "Save changes"
+                        : "Create"}
                   </button>
                 </div>
               </div>
@@ -313,7 +323,7 @@ function TaskModal({
           </div>
 
           {isEditMode ? (
-            <div className="rounded-xl border border-gray-200 bg-gray-50/50 p-4 lg:col-span-2 lg:max-h-[70vh] lg:overflow-y-auto">
+            <div className="min-w-0 max-h-80 overflow-y-auto rounded-xl border border-gray-200 bg-gray-50/50 p-4 lg:col-span-2 lg:max-h-[70vh]">
               <AuditLogTimeline
                 logs={auditLogs}
                 members={members}
@@ -329,10 +339,10 @@ function TaskModal({
         <div className="modal-backdrop-enter fixed inset-0 z-60 flex items-center justify-center bg-black/40 p-4">
           <div className="modal-surface-enter w-full max-w-sm rounded-xl bg-white p-5 shadow-xl">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">
-              Xóa công việc
+              Delete task
             </h3>
             <p className="mb-4 text-sm text-gray-600">
-              Bạn có chắc chắn muốn xóa?
+              Are you sure you want to delete this task?
             </p>
             <div className="flex justify-end gap-3">
               <button
@@ -340,7 +350,7 @@ function TaskModal({
                 onClick={() => setConfirmDelete(false)}
                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
               >
-                Hủy
+                Cancel
               </button>
               <button
                 type="button"
@@ -348,7 +358,7 @@ function TaskModal({
                 disabled={isSubmitting}
                 className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Đồng ý
+                Confirm
               </button>
             </div>
           </div>

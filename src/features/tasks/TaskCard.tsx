@@ -105,8 +105,8 @@ function TaskCard({
             <path d="M16 3v4M8 3v4M3 10h18" />
           </svg>
           {dueDate && !Number.isNaN(dueDate.getTime())
-            ? dueDate.toLocaleDateString("vi-VN")
-            : "Không hạn"}
+            ? dueDate.toLocaleDateString("en-US")
+            : "No due date"}
         </span>
 
         <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
@@ -114,7 +114,7 @@ function TaskCard({
             {getAssigneeInitials(task.assigneeName)}
           </span>
           <span className="max-w-24.5 truncate">
-            {task.assigneeName || "Chưa phân công"}
+            {task.assigneeName || "Unassigned"}
           </span>
         </span>
       </div>
